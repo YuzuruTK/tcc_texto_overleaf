@@ -1,0 +1,50 @@
+% ==============================================================================
+% CAPÍTULO 1 - INTRODUÇÃO
+% ==============================================================================
+
+\section{Introdução}
+\label{sec:introducao}
+
+% Contextualização do tema
+
+A escrita da introdução deve ser encarada como a construção de um roteiro lógico 
+que guia o leitor desde o cenário geral até a sua contribuição específica. 
+
+O texto deve iniciar obrigatoriamente pela delimitação do assunto, 
+estabelecendo o contexto da pesquisa. Deve-se abordar, de forma sucinta, 
+a grande área em que o trabalho está inserido e afunilar gradualmente para 
+o tema específico, situando-o com clareza dentro do campo de estudo.
+
+A partir desse cenário, é fundamental apresentar o problema central e os argumentos 
+que justificam sua relevância, deixando nítido por que ele merece ser investigado. 
+
+Na sequência, deve ser apresentada a solução proposta e os objetivos da pesquisa, 
+demonstrando como essa abordagem avança o estado da arte e quais são 
+os diferenciais que a tornam eficaz frente aos desafios existentes. 
+
+Por fim, para consolidar a ambientação do leitor, a introdução deve apresentar 
+de forma sucinta a estrutura do artigo, descrevendo o que será abordado em 
+cada seção subsequente, garantindo assim uma transição fluida para o 
+desenvolvimento do trabalho.
+
+% \autoref{sec:desenvolvimento}
+
+
+\section{Introdução}
+\label{sec:introducao}
+
+A bioinformática tem desempenhado um papel importante na análise de dados biológicos, especialmente diante do crescimento das bases de dados que armazenam informações sobre sequências de DNA, RNA e proteínas. Nesse contexto, a análise computacional de proteínas constitui uma área relevante de investigação, uma vez que esses componentes desempenham funções essenciais nos organismos, participando de processos como catálise de reações químicas, transporte de moléculas, sinalização celular e manutenção estrutural. Entretanto, embora a obtenção de sequências proteicas tenha se tornado cada vez mais acessível, a identificação e a caracterização de suas funções biológicas continuam sendo desafios importantes para a bioinformática \cite{cruz2017protein}.
+
+A predição funcional de proteínas busca inferir possíveis funções biológicas a partir de informações disponíveis, como sequências de aminoácidos, similaridade com proteínas previamente caracterizadas e características estruturais. Uma das formas de organizar esse conhecimento é a \textit{Gene Ontology} (GO), que fornece um vocabulário padronizado para descrever produtos gênicos segundo três aspectos principais: função molecular, componente celular e processo biológico \cite{geneontology}. Essa padronização permite representar as funções de maneira estruturada e favorece a utilização de métodos computacionais para análise e classificação de proteínas.
+
+Apesar dos avanços nessa área, a classificação funcional permanece um problema desafiador, especialmente quando se busca explorar representações computacionais que possam ser calculadas diretamente a partir das sequências de aminoácidos. Características físico-químicas, composicionais e de complexidade permitem transformar sequências proteicas em conjuntos de atributos numéricos que podem ser utilizados em análises estatísticas e modelos de aprendizado de máquina. Entretanto, essas representações possuem limitações, pois medidas globais podem não capturar integralmente informações relacionadas à ordem dos aminoácidos, a motivos específicos, a domínios proteicos ou a relações evolutivas. Dessa forma, torna-se necessário investigar em que medida essas características contribuem efetivamente para a distinção entre grupos funcionais.
+
+Diante desse cenário, o problema de pesquisa deste trabalho consiste em avaliar a contribuição de características físico-químicas e composicionais extraídas de sequências de aminoácidos para a classificação funcional de proteínas, considerando a capacidade de generalização dos modelos para sequências não utilizadas durante o treinamento. Essa investigação é relevante porque permite examinar, de maneira quantitativa, as possibilidades e as limitações de uma representação baseada em características calculadas diretamente das sequências, sem pressupor que tais características sejam suficientes para determinar, isoladamente, a função biológica de uma proteína.
+
+Para investigar esse problema, propõe-se o desenvolvimento do FASTA2GO, um fluxo computacional destinado ao processamento de sequências proteicas, à extração de características e à integração dessas informações com anotações funcionais provenientes de fontes públicas. A abordagem contempla a leitura de arquivos no formato FASTA, o cálculo de propriedades físico-químicas e composicionais, o armazenamento estruturado dos dados e a preparação de conjuntos de dados para análises e experimentos de classificação. A utilização de informações de anotação funcional permitirá estabelecer os rótulos necessários à avaliação, conforme critérios definidos metodologicamente. A definição desses rótulos deverá especificar o papel dos termos da \textit{Gene Ontology} e, caso sejam utilizadas, das categorias funcionais mais amplas.
+
+O objetivo geral deste trabalho é desenvolver e avaliar um fluxo computacional reprodutível para o processamento de sequências proteicas, a extração de características físico-químicas e composicionais e a investigação de sua utilidade na classificação funcional de proteínas. Como objetivos específicos, pretende-se implementar o processamento de arquivos FASTA; calcular e armazenar características derivadas das sequências; integrar informações de anotação provenientes de bases públicas; definir critérios reproduzíveis para a construção dos rótulos funcionais; preparar conjuntos de treinamento e teste considerando os riscos de vazamento de informações entre sequências semelhantes; comparar modelos de classificação com referências de desempenho simples; e analisar os resultados por meio de métricas adequadas à distribuição das classes.
+
+A contribuição pretendida possui duas dimensões complementares. A primeira consiste na construção de um fluxo organizado e reprodutível para transformar sequências proteicas em dados estruturados, facilitando análises posteriores. A segunda consiste na avaliação experimental da utilidade das características selecionadas para a classificação funcional. Diferentemente de uma abordagem que pressupõe a eficácia dos atributos utilizados, este trabalho pretende investigar essa eficácia empiricamente, considerando o desempenho dos modelos, a distribuição das classes, a qualidade das anotações disponíveis e a influência da similaridade entre as sequências. Assim, os resultados poderão indicar em quais condições a representação adotada oferece informações úteis e quais limitações precisam ser consideradas.
+
+Além desta introdução, o trabalho está organizado em outras cinco seções. A Seção~\ref{sec:referencial-teorico} apresenta o referencial teórico, abordando os conceitos necessários à compreensão das sequências proteicas, das características utilizadas na análise e da classificação funcional. A Seção~\ref{sec:metodologia} descreve os materiais e métodos, incluindo as fontes de dados, o processamento das sequências, a extração de características, a construção dos rótulos e o protocolo de avaliação. A Seção~\ref{sec:desenvolvimento} apresenta o desenvolvimento do FASTA2GO e os procedimentos de implementação. Na sequência, são apresentados e discutidos os resultados dos experimentos, considerando os objetivos e as limitações da abordagem. Por fim, a última seção reúne as considerações finais, as principais conclusões e as possibilidades de trabalhos futuros.
