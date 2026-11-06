@@ -1,16 +1,275 @@
 % ==============================================================================
-% CAPÍTULO 4 - METODOLOGIA
+% CAPÍTULO 2 - METODOLOGIA
+% ==============================================================================
+
+% \section{Metodologia}
+% \label{sec:metodologia}
+
+% Nesta seção, você deve descrever o delineamento da sua pesquisa. O foco aqui não é o
+% que você construiu, mas \textbf{como} você planejou o estudo. Deve-se classificar a
+% pesquisa quanto aos seus objetivos (ex: exploratória, descritiva), natureza (ex: aplicada)
+% e abordagem (ex: qualitativa ou quantitativa).
+
+% Explique os procedimentos técnicos adotados: foi um estudo de caso?
+% Uma pesquisa-ação? Uma revisão bibliográfica? Descreva as etapas do método que você
+% seguiu para chegar aos resultados, garantindo que outro pesquisador consiga entender
+% o seu processo.
+% ```latex
+% ==============================================================================
+% CAPÍTULO 2 - METODOLOGIA
 % ==============================================================================
 
 \section{Metodologia}
 \label{sec:metodologia}
 
-Nesta seção, você deve descrever o delineamento da sua pesquisa. O foco aqui não é o
-que você construiu, mas \textbf{como} você planejou o estudo. Deve-se classificar a
-pesquisa quanto aos seus objetivos (ex: exploratória, descritiva), natureza (ex: aplicada)
-e abordagem (ex: qualitativa ou quantitativa).
+\subsection{Delineamento da pesquisa}
+\label{subsec:delineamento}
 
-Explique os procedimentos técnicos adotados: foi um estudo de caso?
-Uma pesquisa-ação? Uma revisão bibliográfica? Descreva as etapas do método que você
-seguiu para chegar aos resultados, garantindo que outro pesquisador consiga entender
-o seu processo.
+A presente pesquisa caracteriza-se, quanto à sua natureza, como aplicada, uma vez que investiga a utilização de técnicas de aprendizado de máquina em um problema específico da Bioinformática: a predição de funções moleculares de proteínas a partir de características extraídas de suas sequências de aminoácidos.
+
+Quanto aos seus objetivos, a pesquisa apresenta caráter exploratório e descritivo. Exploratório, por investigar o comportamento de diferentes algoritmos de aprendizado de máquina quando aplicados à tarefa de predição funcional de proteínas; e descritivo, por analisar e apresentar o desempenho dos modelos por meio de métricas quantitativas.
+
+Em relação à abordagem, trata-se de uma pesquisa quantitativa, pois a avaliação das diferentes abordagens é realizada por meio de medidas numéricas de desempenho, permitindo comparar os resultados obtidos pelos algoritmos em condições experimentais definidas.
+
+Como procedimento técnico, foi conduzido um estudo experimental computacional e comparativo, no qual diferentes algoritmos de aprendizado de máquina foram aplicados à mesma tarefa de classificação multirrótulo. Na comparação principal, foram mantidos constantes o conjunto de características utilizado como entrada, os rótulos funcionais e a divisão dos dados entre treinamento e teste. Dessa forma, busca-se concentrar a análise nas diferenças de desempenho entre os algoritmos avaliados.
+
+Adicionalmente, foi realizado um experimento complementar utilizando a biblioteca AutoGluon Tabular, cuja configuração estabelece condições específicas de amostragem e seleção de rótulos. Esse experimento é analisado separadamente da comparação principal, considerando suas particularidades metodológicas \cite{prodanov2013}.
+
+
+\subsection{Fonte e seleção dos dados}
+\label{subsec:fonte_dados}
+
+Os dados utilizados nesta pesquisa foram obtidos do UniProt Knowledgebase (UniProtKB), especificamente de sua seção Swiss-Prot, composta por registros de proteínas revisados manualmente por especialistas. A escolha dessa fonte considera a disponibilidade de sequências de aminoácidos associadas a informações e anotações biológicas organizadas, permitindo relacionar as características das proteínas às respectivas informações funcionais \cite{uniprot2025}.
+
+A base de entrada foi obtida no formato FASTA em 20 de outubro de 2026, contendo 575.748 registros de sequências proteicas. Cada registro possui um identificador de acesso utilizado para relacionar a sequência às informações e anotações correspondentes disponibilizadas pelo UniProtKB.
+
+As sequências foram processadas e organizadas em uma base de dados DuckDB, juntamente com as características calculadas e as informações utilizadas nas etapas posteriores da pesquisa. As anotações funcionais foram organizadas de acordo com os identificadores das proteínas, permitindo estabelecer a correspondência entre cada sequência e seus respectivos termos da Gene Ontology.
+
+Para a realização dos experimentos de aprendizado de máquina, foram consideradas somente as proteínas que possuíam pelo menos uma anotação correspondente ao vocabulário de Função Molecular utilizado neste estudo. Dessa forma, das 575.748 proteínas inicialmente disponíveis, 478.961 possuíam ao menos um rótulo funcional elegível e foram incluídas no conjunto experimental principal. As 96.787 proteínas restantes, sem rótulos de Função Molecular no vocabulário adotado, foram excluídas dos conjuntos de treinamento e teste.
+
+É importante destacar que proteínas sem anotações funcionais não foram tratadas como exemplos negativos. A ausência de uma anotação não representa necessariamente a ausência de uma função biológica, podendo indicar apenas que aquela função não está registrada na fonte de dados ou não foi contemplada pelo vocabulário selecionado. Assim, a exclusão desses registros evita atribuir rótulos negativos sem evidência suficiente.
+
+
+\subsection{Construção dos rótulos funcionais}
+\label{subsec:rotulos_funcionais}
+
+As funções das proteínas foram representadas por meio de termos da Gene Ontology (GO), recurso que organiza informações funcionais em uma estrutura hierárquica e padronizada. A Gene Ontology contempla três aspectos principais: Processo Biológico (Biological Process), Componente Celular (Cellular Component) e Função Molecular (Molecular Function). Neste trabalho, foi utilizado exclusivamente o aspecto Molecular Function, por descrever as atividades moleculares desempenhadas pelos produtos gênicos \cite{geneontology2026}.
+
+Para reduzir a granularidade dos termos funcionais e estabelecer um conjunto de categorias adequado à tarefa de classificação, foi utilizado como referência o vocabulário GO Slim \texttt{goslim\_generic}, restrito ao aspecto Molecular Function. Entretanto, o vocabulário genérico não contempla o termo \texttt{GO:0005488} (binding), embora inclua categorias relacionadas à atividade catalítica. Por esse motivo, foi incorporada uma extensão específica contendo esse termo, resultando em um vocabulário de 41 rótulos funcionais.
+
+A construção dos rótulos considerou a estrutura hierárquica da Gene Ontology. Para relacionar as anotações originais das proteínas às categorias do vocabulário selecionado, foram percorridas as relações hierárquicas \texttt{is\_a} e \texttt{part\_of}, considerando todos os ancestrais aplicáveis dentro do aspecto Molecular Function. Esse procedimento permite associar anotações mais específicas aos respectivos termos abrangentes contemplados pelo GO Slim.
+
+Alguns critérios adicionais foram adotados durante a construção dos rótulos:
+
+\begin{itemize}
+    \item identificadores alternativos (\texttt{alt\_id}) foram convertidos para seus respectivos identificadores primários;
+    \item termos obsoletos foram rejeitados;
+    \item o termo raiz \texttt{GO:0003674} foi excluído, pois sua propagação resultaria em um rótulo positivo para todas as proteínas com anotações de função molecular;
+    \item associações duplicadas entre proteínas e termos funcionais foram removidas, preservando a união dos rótulos associados a cada proteína.
+\end{itemize}
+
+Para garantir a reprodutibilidade da rotulagem, foram utilizados os arquivos de ontologia e de definição do GO Slim correspondentes à versão de 26 de julho de 2026. Os arquivos \texttt{go-basic.obo} e \texttt{goslim\_generic.obo} tiveram seus respectivos valores de hash SHA-256 registrados, permitindo verificar se as fontes utilizadas permanecem consistentes durante a execução do processo.
+
+Após a construção do vocabulário, cada proteína passou a ser representada por um conjunto de rótulos binários. Para cada um dos 41 termos funcionais, atribui-se o valor 1 quando a proteína possui a respectiva associação e 0 quando não apresenta aquela associação dentro do vocabulário utilizado. Como uma proteína pode desempenhar mais de uma função molecular, essa representação caracteriza a tarefa como um problema de classificação multirrótulo, no qual diferentes categorias podem ser atribuídas simultaneamente a uma mesma sequência.
+
+
+\subsection{Extração e seleção das características}
+\label{subsec:caracteristicas}
+
+As sequências de aminoácidos foram transformadas em representações numéricas por meio da extração de características físico-químicas, composicionais e estatísticas. Essa etapa tem como finalidade representar aspectos das sequências que possam ser utilizados pelos algoritmos de aprendizado de máquina na identificação de padrões associados às funções moleculares.
+
+O conjunto de características utilizado nos experimentos principais é composto por 35 atributos, organizados em três grupos: oito descritores físico-químicos e de sequência, vinte características de composição de aminoácidos e sete características correspondentes a classes químicas derivadas da composição.
+
+\subsubsection{Descritores físico-químicos e de sequência}
+
+O primeiro grupo é composto por oito características que representam propriedades gerais das sequências proteicas:
+
+\begin{itemize}
+    \item \textbf{Comprimento canônico:} quantidade de resíduos pertencentes aos vinte aminoácidos canônicos presentes na sequência;
+    \item \textbf{Massa molecular:} estimativa da massa molecular da proteína, calculada a partir da composição de aminoácidos;
+    \item \textbf{Ponto isoelétrico:} valor de pH no qual a carga elétrica líquida estimada da proteína é igual a zero;
+    \item \textbf{GRAVY:} média do índice de hidropaticidade dos aminoácidos, utilizada como indicador geral do caráter hidrofóbico ou hidrofílico da sequência;
+    \item \textbf{Índice de instabilidade:} estimativa relacionada à estabilidade da proteína com base na composição e nas características de seus resíduos;
+    \item \textbf{Índice alifático:} medida associada à proporção de resíduos alifáticos na sequência;
+    \item \textbf{Aromaticidade:} proporção de resíduos aromáticos presentes na sequência;
+    \item \textbf{Entropia de Shannon:} medida estatística da diversidade e da distribuição dos aminoácidos na sequência.
+\end{itemize}
+
+As propriedades de massa molecular, GRAVY, índice de instabilidade e aromaticidade foram calculadas utilizando o módulo \texttt{ProtParam}, da biblioteca Biopython. O ponto isoelétrico foi estimado por meio do módulo \texttt{IsoelectricPoint}, também disponibilizado pela biblioteca \cite{cock2009}.
+
+O índice alifático foi calculado de acordo com a formulação apresentada por Ikai (1980), considerando as quantidades dos resíduos alanina (A), valina (V), isoleucina (I) e leucina (L):
+
+\begin{equation}
+AI = 100 \cdot \frac{A + 2{,}9V + 3{,}9(I+L)}{N}
+\end{equation}
+
+em que $A$, $V$, $I$ e $L$ representam as quantidades dos respectivos aminoácidos na sequência, e $N$ corresponde ao comprimento canônico da proteína \cite{ikai1980}.
+
+A entropia de Shannon foi utilizada para representar a diversidade da composição de aminoácidos. Seu cálculo considera a frequência relativa de cada resíduo na sequência:
+
+\begin{equation}
+H = -\sum_{i=1}^{20} p_i \log_2(p_i)
+\end{equation}
+
+em que $p_i$ representa a frequência relativa do aminoácido $i$ entre os vinte aminoácidos canônicos. Quanto maior o valor da entropia, maior a diversidade da distribuição dos resíduos na sequência.
+
+\subsubsection{Composição de aminoácidos}
+
+O segundo grupo contém vinte características correspondentes à composição de aminoácidos (Amino Acid Composition -- AAC). Cada atributo representa o percentual de ocorrência de um dos vinte aminoácidos canônicos na sequência proteica.
+
+O percentual de cada aminoácido é calculado pela razão entre sua quantidade na sequência e o comprimento canônico total, multiplicada por 100:
+
+\begin{equation}
+AAC_i = \frac{n_i}{N} \cdot 100
+\end{equation}
+
+em que $n_i$ representa a quantidade de ocorrências do aminoácido $i$, e $N$ corresponde ao número total de resíduos canônicos da sequência.
+
+Dessa forma, cada proteína é representada por vinte valores percentuais, referentes aos aminoácidos alanina, arginina, asparagina, ácido aspártico, cisteína, glutamina, ácido glutâmico, glicina, histidina, isoleucina, leucina, lisina, metionina, fenilalanina, prolina, serina, treonina, triptofano, tirosina e valina.
+
+\subsubsection{Classes químicas}
+
+O terceiro grupo compreende sete características derivadas da composição de aminoácidos. Essas características agrupam resíduos de acordo com classes químicas e propriedades compartilhadas, permitindo representar a distribuição geral de determinados grupos na sequência.
+
+As classes utilizadas são:
+
+\begin{itemize}
+    \item \textbf{Hidrofóbicos:} alanina, valina, isoleucina, leucina, metionina, fenilalanina, triptofano e tirosina;
+    \item \textbf{Polares:} serina, treonina, asparagina, cisteína e glutamina;
+    \item \textbf{Positivamente carregados:} lisina, arginina e histidina;
+    \item \textbf{Negativamente carregados:} ácido aspártico e ácido glutâmico;
+    \item \textbf{Carregados:} lisina, arginina, histidina, ácido aspártico e ácido glutâmico;
+    \item \textbf{Aromáticos:} fenilalanina, triptofano e tirosina;
+    \item \textbf{Contendo enxofre:} cisteína e metionina.
+\end{itemize}
+
+O percentual de cada classe é obtido pela soma dos percentuais dos aminoácidos que a compõem. Assim, as sete características são derivadas diretamente dos atributos de composição de aminoácidos, não exigindo uma nova análise independente da sequência.
+
+\subsubsection{Tratamento das sequências e seleção final}
+
+Durante o cálculo das características, foram considerados os vinte aminoácidos canônicos. Resíduos não canônicos ou ambíguos, como X, B, Z, U e O, foram removidos da sequência utilizada no cálculo da composição de aminoácidos e das propriedades físico-químicas, uma vez que essas fórmulas não são definidas para tais símbolos. A quantidade de resíduos removidos foi contabilizada separadamente.
+
+Embora o processamento do FASTA2GO também calcule e armazene 400 características de composição de dipeptídeos (Dipeptide Composition -- DPC), correspondentes às possíveis combinações de aminoácidos adjacentes, esses atributos não foram utilizados nos experimentos de modelagem descritos neste trabalho.
+
+Portanto, a representação efetivamente fornecida aos algoritmos é composta por 35 características: oito descritores físico-químicos e de sequência, vinte percentuais de composição de aminoácidos e sete percentuais de classes químicas.
+
+Não foi realizada uma seleção automatizada de atributos. O mesmo conjunto de 35 características foi mantido em todos os modelos da comparação principal, permitindo avaliar as diferenças de desempenho entre os algoritmos sem modificar a representação de entrada. Ressalta-se que algumas características apresentam dependência estrutural, uma vez que os percentuais das classes químicas são calculados a partir dos percentuais individuais dos aminoácidos, e a soma dos atributos AAC é constante. Essas relações podem introduzir redundância ou multicolinearidade no conjunto de dados, mas os atributos foram mantidos conforme o escopo experimental estabelecido.
+
+
+\subsection{Preparação e divisão dos dados}
+\label{subsec:preparacao_divisao}
+
+Após a extração das características e a construção dos rótulos funcionais, os dados foram organizados em duas estruturas matriciais: uma matriz de características, utilizada como entrada dos modelos, e uma matriz de rótulos, utilizada como referência para o treinamento e a avaliação.
+
+A matriz de características, representada por $X$, contém 35 colunas correspondentes aos atributos descritos anteriormente. A matriz de rótulos, representada por $Y$, contém 41 colunas binárias, uma para cada termo do vocabulário de Molecular Function. A correspondência entre as matrizes foi estabelecida por meio dos identificadores das proteínas, garantindo que cada linha de $X$ correspondesse à linha equivalente em $Y$.
+
+Antes da divisão dos dados, foram realizadas verificações de integridade para validar a correspondência entre identificadores, a unicidade dos registros e a presença de valores numéricos finitos nas características. Também foram verificadas as dimensões das matrizes e a existência de pelo menos um rótulo funcional por proteína considerada no conjunto experimental.
+
+Na comparação principal, as 478.961 proteínas com pelo menos uma anotação funcional foram divididas em conjuntos de treinamento e teste, adotando-se uma proporção planejada de 60\% para treinamento e 40\% para teste. Para preservar, tanto quanto possível, a distribuição dos diferentes rótulos nos dois subconjuntos, foi utilizada a técnica de estratificação iterativa multirrótulo, disponibilizada pela biblioteca \texttt{iterative-stratification}. Esse procedimento considera a presença simultânea de múltiplos rótulos em cada exemplo durante a distribuição das amostras \cite{sechidis2011}.
+
+A divisão foi realizada uma única vez, utilizando a semente aleatória 42, com o objetivo de permitir a reprodução dos mesmos subconjuntos experimentais. Após a divisão inicial, foi verificado se todos os rótulos possuíam ao menos um exemplo positivo no conjunto de treinamento. Quando determinado rótulo não apresentava exemplos positivos nesse subconjunto, uma proteína positiva correspondente era transferida do conjunto de teste para o treinamento. Entre as candidatas à transferência, era selecionada a proteína com a menor quantidade total de rótulos associados. Esse ajuste foi realizado para permitir o treinamento dos classificadores binários correspondentes a todos os rótulos.
+
+A divisão resultante foi compartilhada pelos quatro modelos da comparação principal. Dessa forma, todos receberam as mesmas amostras de treinamento e foram avaliados sobre o mesmo conjunto de teste. Não foi realizada otimização de hiperparâmetros com base no conjunto de teste.
+
+Ressalta-se que a divisão adotada foi baseada na estratificação dos rótulos, não em agrupamentos de similaridade ou homologia entre sequências. Portanto, proteínas semelhantes podem estar presentes simultaneamente nos conjuntos de treinamento e teste, aspecto que deve ser considerado na interpretação da capacidade de generalização dos modelos.
+
+
+\subsection{Modelos de aprendizado de máquina}
+\label{subsec:modelos}
+
+A etapa de modelagem teve como objetivo comparar diferentes algoritmos de aprendizado de máquina aplicados à predição de funções moleculares de proteínas. Considerando que uma mesma proteína pode estar associada a múltiplos termos da Gene Ontology, foi adotada a estratégia \textit{One-vs-Rest} (OvR), na qual cada rótulo funcional é tratado como um problema de classificação binária independente.
+
+Nesse procedimento, é construído um classificador para cada termo GO, responsável por estimar a probabilidade de associação de uma proteína à respectiva função molecular. Assim, para o experimento principal, foram treinados classificadores correspondentes aos 41 rótulos do vocabulário utilizado.
+
+\subsubsection{Comparação principal de algoritmos}
+
+A comparação principal contempla quatro abordagens: Dummy Classifier, Regressão Logística, Random Forest e XGBoost. Os modelos foram implementados utilizando bibliotecas de aprendizado de máquina disponíveis no ecossistema Python, principalmente o scikit-learn e o XGBoost \cite{pedregosa2011,chen2016}.
+
+O \textbf{Dummy Classifier} foi utilizado como modelo de referência (*baseline*), empregando a estratégia \texttt{prior}. Nessa configuração, as previsões são baseadas nas proporções das classes observadas no conjunto de treinamento, permitindo estabelecer uma referência básica para a avaliação dos modelos supervisionados.
+
+A \textbf{Regressão Logística} foi implementada utilizando a regularização com parâmetro $C=1{,}0$, solucionador \texttt{liblinear} e limite de 2.000 iterações. Antes da classificação, foi aplicado o \texttt{StandardScaler} para padronizar as características. Essa transformação foi organizada em um \textit{pipeline}, garantindo que os parâmetros de padronização fossem ajustados exclusivamente com os dados de treinamento.
+
+O modelo \textbf{Random Forest} foi configurado com 150 árvores de decisão, utilizando o parâmetro \texttt{max\_features} igual a \texttt{sqrt} e tamanho mínimo de duas amostras por folha (\texttt{min\_samples\_leaf=2}). O modelo foi executado com semente aleatória 42.
+
+Por sua vez, o \textbf{XGBoost} foi configurado com 150 estimadores, profundidade máxima igual a 4 e taxa de aprendizado de 0,05. Foram utilizados os parâmetros \texttt{subsample=0.8}, \texttt{colsample\_bytree=0.8} e \texttt{reg\_lambda=1.0}, além da função objetivo binária \texttt{binary:logistic} e do critério \texttt{logloss} para avaliação interna. O método de construção das árvores foi definido como \texttt{hist}.
+
+Os parâmetros dos modelos foram mantidos fixos durante os experimentos, não sendo realizada busca automatizada ou otimização de hiperparâmetros. Essa decisão permitiu conduzir a comparação com configurações previamente estabelecidas e manter o mesmo conjunto de características e subconjuntos de dados para todos os algoritmos.
+
+Durante a etapa de predição, as probabilidades estimadas pelos classificadores foram convertidas em decisões binárias utilizando um limiar comum de 0,5. Dessa maneira, um rótulo era atribuído à proteína quando a probabilidade estimada era maior ou igual a esse valor.
+
+\subsubsection{Experimento complementar com AutoGluon}
+
+Além da comparação principal, foi conduzido um experimento complementar utilizando o AutoGluon Tabular, uma ferramenta de aprendizado de máquina automatizado para dados tabulares. Nesse experimento, a estratégia \textit{One-vs-Rest} também foi utilizada, com a construção de um classificador binário independente para cada rótulo funcional selecionado \cite{erickson2020}.
+
+Diferentemente da comparação principal, esse experimento utilizou uma amostra limitada a 100.000 registros, selecionados de forma determinística a partir da ordenação dos identificadores das proteínas. Após a exclusão das proteínas sem anotações de Molecular Function, foram obtidos 88.220 exemplos rotulados. Nessa amostra, 40 dos 41 rótulos do vocabulário estavam presentes.
+
+A divisão entre treinamento e teste manteve a proporção de 60\% e 40\%, utilizando estratificação multirrótulo e a mesma semente aleatória 42. O conjunto resultante foi composto por 52.861 proteínas para treinamento e 35.359 para teste.
+
+Para a seleção dos rótulos treináveis, foi estabelecido um suporte mínimo de vinte exemplos positivos no conjunto de treinamento. Dos rótulos elegíveis, foram selecionados os três mais prevalentes: \texttt{GO:0003824} (catalytic activity), \texttt{GO:0005488} (binding) e \texttt{GO:0016740} (transferase activity).
+
+O AutoGluon foi executado utilizando o predefinido \texttt{medium\_quality}, com limite de tempo de 90 segundos por rótulo e utilização de uma unidade de processamento (CPU). Foram disponibilizadas as famílias de modelos Random Forest (\texttt{RF}), Extra Trees (\texttt{XT}) e XGBoost (\texttt{XGB}) para o processo automatizado de treinamento e seleção. A métrica interna utilizada pelo preditor foi F1-score.
+
+Embora o experimento complementar utilize o mesmo conjunto de 35 características da comparação principal, suas condições de execução são distintas, principalmente em relação à quantidade de proteínas e ao número de rótulos avaliados. Por esse motivo, seus resultados são analisados separadamente, não sendo tratados como uma comparação diretamente equivalente àquela realizada entre Dummy Classifier, Regressão Logística, Random Forest e XGBoost.
+
+
+\subsection{Métricas de avaliação}
+\label{subsec:metricas}
+
+A avaliação dos modelos foi realizada por meio de métricas quantitativas calculadas a partir da comparação entre os rótulos previstos pelos classificadores e os rótulos de referência presentes no conjunto de teste. Considerando a natureza multirrótulo do problema, foram utilizadas métricas com diferentes estratégias de agregação, permitindo analisar tanto o desempenho geral quanto o comportamento dos modelos diante de rótulos com diferentes frequências.
+
+As métricas de maior interesse para a comparação são precisão (*Precision*) e F1-score. A precisão representa a proporção de previsões positivas realizadas corretamente em relação ao total de previsões positivas do modelo. Seu cálculo é definido por:
+
+\begin{equation}
+Precision = \frac{TP}{TP + FP}
+\end{equation}
+
+em que $TP$ representa os verdadeiros positivos e $FP$ os falsos positivos.
+
+A revocação (*Recall*) representa a proporção de exemplos positivos corretamente identificados pelo modelo em relação ao total de exemplos efetivamente positivos. É calculada por:
+
+\begin{equation}
+Recall = \frac{TP}{TP + FN}
+\end{equation}
+
+em que $FN$ representa os falsos negativos.
+
+O F1-score corresponde à média harmônica entre precisão e revocação, permitindo avaliar o equilíbrio entre essas duas medidas:
+
+\begin{equation}
+F1 = 2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}
+\end{equation}
+
+Na comparação principal, foram calculadas as seguintes métricas:
+
+\begin{itemize}
+    \item \textbf{Macro-F1:} calcula o F1-score individualmente para cada rótulo e realiza a média aritmética entre eles, atribuindo o mesmo peso a cada categoria;
+    \item \textbf{Micro-F1:} agrega os verdadeiros positivos, falsos positivos e falsos negativos de todos os rótulos antes de calcular o F1-score, considerando conjuntamente as decisões realizadas;
+    \item \textbf{Weighted-F1:} calcula a média dos F1-scores individuais ponderada pelo suporte de cada rótulo;
+    \item \textbf{Macro-Precision e Micro-Precision:} representam a precisão agregada, respectivamente, pela média entre os rótulos e pelo conjunto de decisões realizadas;
+    \item \textbf{Macro-Recall e Micro-Recall:} representam a revocação agregada pelas mesmas estratégias de ponderação.
+\end{itemize}
+
+Além dessas medidas, foram utilizadas duas métricas complementares. A Hamming Loss representa a proporção de decisões incorretas entre todas as associações proteína-rótulo avaliadas. Já a Subset Accuracy considera uma previsão correta somente quando o conjunto completo de rótulos atribuídos a uma proteína corresponde exatamente ao conjunto de referência.
+
+Os tempos de treinamento e de predição também foram registrados para os modelos da comparação principal, permitindo observar o custo computacional associado a cada abordagem.
+
+Para as métricas que envolvem divisões por zero, foi adotado o valor zero como resultado, por meio da configuração \texttt{zero\_division=0} disponibilizada pelo scikit-learn. Todas as decisões binárias da comparação principal utilizaram o limiar de probabilidade de 0,5.
+
+No experimento com AutoGluon, foram calculadas as métricas Macro-F1, Micro-F1, Weighted-F1, Hamming Loss, Subset Accuracy, Macro-Precision e Macro-Recall, além de precisão, revocação e F1-score individuais para cada um dos três rótulos avaliados.
+
+A utilização de diferentes métricas permite observar aspectos complementares do desempenho dos modelos. Em particular, a comparação entre métricas Macro e Micro é relevante em razão da distribuição desigual de frequências entre os termos funcionais, uma vez que categorias com maior quantidade de exemplos podem influenciar de maneira diferente os resultados agregados.
+
+
+\subsection{Ambiente experimental e reprodutibilidade}
+\label{subsec:ambiente}
+
+Os procedimentos de processamento dos dados e execução dos experimentos foram realizados na linguagem Python, utilizando ambientes virtuais e gerenciamento de dependências por meio da ferramenta \texttt{uv}. A versão de Python definida para o projeto é 3.13.
+
+As dependências e suas restrições de compatibilidade são declaradas no arquivo \texttt{pyproject.toml}, enquanto o arquivo \texttt{uv.lock} registra as versões efetivamente resolvidas para o ambiente experimental. Entre as principais bibliotecas utilizadas estão Biopython 1.88, DuckDB 2.0.0, NumPy 2.5.4, Pandas 2.3.3, scikit-learn 1.9.1, XGBoost 3.4.1, AutoGluon Tabular 1.6.3 e iterative-stratification 0.1.9.
+
+A reprodutibilidade dos experimentos foi considerada desde a preparação dos dados. Para isso, foram registrados o arquivo FASTA utilizado, correspondente à versão obtida em 20 de outubro de 2026, a versão dos arquivos de ontologia da Gene Ontology, as configurações dos modelos, a proporção de treinamento e teste e a semente aleatória utilizada nas divisões dos dados.
+
+Os arquivos de ontologia utilizados na construção dos rótulos possuem seus respectivos valores SHA-256 registrados no projeto, permitindo verificar a integridade das fontes empregadas. Da mesma forma, a manutenção dos parâmetros experimentais nos notebooks e o registro das versões das dependências no arquivo de bloqueio permitem documentar as condições utilizadas para a execução dos modelos.
+
+Por fim, os experimentos foram organizados em notebooks independentes, permitindo reproduzir separadamente a comparação principal dos algoritmos e a avaliação complementar com AutoGluon. Essa organização também facilita a análise dos resultados e a identificação das configurações associadas a cada execução.
+```

@@ -2,60 +2,139 @@
 % CAPÍTULO 3 - REFERÊNCIAL TEÓRICO
 % ==============================================================================
     
-\section{REFERÊNCIAL TEÓRICO (opcional)} 
+% \section{REFERÊNCIAL TEÓRICO (opcional)} 
+% \label{sec:referencial-teorico}
+
+% Nesta seção, deve-se apresentar o estado da arte da pesquisa, discutindo e 
+% comparando trabalhos recentes que possuam objetivos, problemas ou metodologias 
+% semelhantes ao tema abordado. O texto deve ir além da simples descrição, 
+% estabelecendo um diálogo entre as obras citadas para destacar as lacunas 
+% que o seu trabalho pretende preencher.
+
+% Escreva um parágrafo introdutório apresentando os critérios de busca ou os 
+% grandes eixos temáticos que agrupam as pesquisas selecionadas. Utilize subseções 
+% para organizar os trabalhos por similaridade (ex: Abordagens Baseadas em IA, 
+% Estudos de Caso em Engenharia de Software). É fundamental que, ao final de cada 
+% análise, fique claro como a sua proposta se diferencia ou avança em relação aos
+% artigos apresentados.
+
+% \textbf{Orientações para Citação}
+
+% Abaixo, estão disponibilizados exemplos de como realizar citações no texto
+% utilizando comandos do LaTeX. Lembre-se de que todas as fontes devem estar
+% cadastradas no seu arquivo de referências (\texttt{.bib}) para que a lista
+% final do trabalho seja gerada automaticamente.
+
+% \textbf{Exemplos de citações:}
+
+% Use o \texttt{\textbackslash citeonline\{\}} quando você quiser citar o nome
+% do autor diretamente no seu texto (o LaTeX deixará apenas o ano entre parênteses).
+
+% \textbf{Exemplo:} Segundo \citeonline{almeida2022}, a escolha correta de algoritmos
+% de otimização é fundamental para melhorar o desempenho e a velocidade de
+% resposta em sistemas distribuídos.
+
+% Use o \texttt{\textbackslash cite\{\}} quando fizer uma afirmação e quiser
+% indicar a fonte apenas ao final (o LaTeX colocará o nome e o ano entre
+% parênteses).
+
+% \textbf{Exemplo:} A utilização de sistemas distribuídos exige uma análise
+% detalhada sobre como os algoritmos de otimização podem reduzir o tempo de
+% processamento \cite{almeida2022}.
+
+% \textbf{Citações usadas para gerar as referências de exemplo:}\\
+% Estes exemplos são utilizados para mostrar como diferentes tipos de
+% fontes são apresentados ao final do documento nas referências.
+
+% Verifique os campos necessários no arquivo ``referencias.bib'' para que 
+% cada referência seja apresentada corretamente na seção de Referências: 
+
+% Dissertação, \cite{almeida2022}\\
+% Trabalho publicado em Conferência, \cite{cbsoft2023}\\
+% Página web, \cite{ferreira2020}\\
+% Manual, \cite{latex2023}\\
+% Capitulo de livro, \cite{mendes2019}\\
+% Relatório técnico, \cite{oliveira2020}\\
+% Livro, \cite{linden2012}\\
+% Tese de doutorado, \cite{rodrigues2021}\\
+% Artigo científico, \cite{silva2023}\\
+% Livro de Conferência, \cite{souza2022}
+
+% ==============================================================================
+% CAPÍTULO 3 - REFERENCIAL TEÓRICO
+% ==============================================================================
+
+\section{Referencial Teórico}
 \label{sec:referencial-teorico}
 
-Nesta seção, deve-se apresentar o estado da arte da pesquisa, discutindo e 
-comparando trabalhos recentes que possuam objetivos, problemas ou metodologias 
-semelhantes ao tema abordado. O texto deve ir além da simples descrição, 
-estabelecendo um diálogo entre as obras citadas para destacar as lacunas 
-que o seu trabalho pretende preencher.
+Este capítulo apresenta os principais conceitos relacionados à predição computacional de funções proteicas. Inicialmente, são abordadas as características das proteínas e a relação entre suas sequências de aminoácidos e suas funções. Em seguida, são apresentados os fundamentos da Gene Ontology, da representação computacional de sequências e das técnicas de aprendizado de máquina utilizadas nesse contexto. Por fim, são discutidos trabalhos relacionados à predição funcional, permitindo contextualizar a abordagem adotada nesta pesquisa.
 
-Escreva um parágrafo introdutório apresentando os critérios de busca ou os 
-grandes eixos temáticos que agrupam as pesquisas selecionadas. Utilize subseções 
-para organizar os trabalhos por similaridade (ex: Abordagens Baseadas em IA, 
-Estudos de Caso em Engenharia de Software). É fundamental que, ao final de cada 
-análise, fique claro como a sua proposta se diferencia ou avança em relação aos
-artigos apresentados.
 
-\textbf{Orientações para Citação}
+\subsection{Proteínas e sequências de aminoácidos}
+\label{subsec:proteinas-sequencias}
 
-Abaixo, estão disponibilizados exemplos de como realizar citações no texto
-utilizando comandos do LaTeX. Lembre-se de que todas as fontes devem estar
-cadastradas no seu arquivo de referências (\texttt{.bib}) para que a lista
-final do trabalho seja gerada automaticamente.
+As proteínas são macromoléculas constituídas por cadeias de aminoácidos e desempenham funções essenciais nos organismos vivos, participando de processos como catálise de reações químicas, transporte de substâncias, sinalização celular e manutenção estrutural. A ordem dos aminoácidos em uma proteína constitui sua estrutura primária e influencia sua organização tridimensional e suas propriedades funcionais \cite{branden1999}.
 
-\textbf{Exemplos de citações:}
+A sequência de aminoácidos representa, portanto, uma fonte importante de informação para o estudo das proteínas. Por meio de sua análise, é possível identificar características composicionais e físico-químicas que podem apresentar relações com determinadas funções biológicas. Essa relação fundamenta a utilização de métodos computacionais para investigar possíveis funções a partir das sequências proteicas.
 
-Use o \texttt{\textbackslash citeonline\{\}} quando você quiser citar o nome
-do autor diretamente no seu texto (o LaTeX deixará apenas o ano entre parênteses).
 
-\textbf{Exemplo:} Segundo \citeonline{almeida2022}, a escolha correta de algoritmos
-de otimização é fundamental para melhorar o desempenho e a velocidade de
-resposta em sistemas distribuídos.
+\subsection{Anotação e predição de funções proteicas}
+\label{subsec:anotacao-predicao-funcional}
 
-Use o \texttt{\textbackslash cite\{\}} quando fizer uma afirmação e quiser
-indicar a fonte apenas ao final (o LaTeX colocará o nome e o ano entre
-parênteses).
+A anotação funcional consiste no registro de informações sobre as funções atribuídas a uma proteína, enquanto a predição funcional busca estimar essas funções a partir de informações disponíveis, como sequências de aminoácidos e características derivadas. Embora a caracterização experimental forneça evidências importantes, sua realização em larga escala apresenta desafios relacionados a custos, tempo e disponibilidade de recursos \cite{bonetta2020,makrodimitris2020}.
 
-\textbf{Exemplo:} A utilização de sistemas distribuídos exige uma análise
-detalhada sobre como os algoritmos de otimização podem reduzir o tempo de
-processamento \cite{almeida2022}.
+Nesse contexto, métodos computacionais podem auxiliar na identificação de possíveis funções, utilizando informações provenientes de proteínas previamente caracterizadas. Entre as abordagens existentes estão métodos baseados em similaridade de sequências, características físico-químicas, estruturas tridimensionais e redes de interação entre proteínas. Esta pesquisa concentra-se nas abordagens que utilizam características extraídas diretamente das sequências de aminoácidos \cite{lee2007,lin2024}.
 
-\textbf{Citações usadas para gerar as referências de exemplo:}\\
-Estes exemplos são utilizados para mostrar como diferentes tipos de
-fontes são apresentados ao final do documento nas referências.
 
-Verifique os campos necessários no arquivo ``referencias.bib'' para que 
-cada referência seja apresentada corretamente na seção de Referências: 
+\subsection{Gene Ontology}
+\label{subsec:gene-ontology}
 
-Dissertação, \cite{almeida2022}\\
-Trabalho publicado em Conferência, \cite{cbsoft2023}\\
-Página web, \cite{ferreira2020}\\
-Manual, \cite{latex2023}\\
-Capitulo de livro, \cite{mendes2019}\\
-Relatório técnico, \cite{oliveira2020}\\
-Livro, \cite{linden2012}\\
-Tese de doutorado, \cite{rodrigues2021}\\
-Artigo científico, \cite{silva2023}\\
-Livro de Conferência, \cite{souza2022}
+A Gene Ontology (GO) é um recurso utilizado para padronizar a representação de informações funcionais associadas a genes e seus produtos. Sua estrutura organiza os termos em três aspectos principais: Função Molecular (Molecular Function), Processo Biológico (Biological Process) e Componente Celular (Cellular Component). Esses aspectos permitem descrever, respectivamente, as atividades moleculares, os processos biológicos e os locais celulares relacionados aos produtos gênicos \cite{ashburner2000,goconsortium2021}.
+
+Os termos da GO possuem identificadores próprios e estão organizados em uma estrutura hierárquica, permitindo relacionar categorias específicas a conceitos mais abrangentes. O GO Slim consiste em um subconjunto de termos selecionados para representar essas informações de maneira reduzida, facilitando análises que utilizam um vocabulário funcional limitado. Neste trabalho, são considerados exclusivamente termos do aspecto Molecular Function, utilizados como rótulos para a tarefa de predição funcional \cite{goconsortium2026}.
+
+
+\subsection{Representação computacional de sequências proteicas}
+\label{subsec:representacao-sequencias}
+
+Para utilizar sequências proteicas em algoritmos tradicionais de aprendizado de máquina, é necessário transformá-las em representações numéricas. Essa transformação pode considerar diferentes informações, como a frequência dos aminoácidos, a ocorrência de pares de resíduos e propriedades físico-químicas da sequência. A escolha da representação influencia quais padrões ficam disponíveis para os modelos durante o treinamento \cite{jing2020}.
+
+A composição de aminoácidos (Amino Acid Composition -- AAC) representa a frequência relativa de cada um dos vinte aminoácidos canônicos, produzindo uma representação numérica compacta da sequência. Já a composição de dipeptídeos (Dipeptide Composition -- DPC) considera a frequência de pares adjacentes de aminoácidos, incorporando informações locais sobre sua organização.
+
+Além dessas representações, propriedades físico-químicas podem descrever características como massa molecular, ponto isoelétrico, hidropaticidade e índice alifático. Características estatísticas, como a entropia de Shannon, também podem representar a diversidade da composição de aminoácidos \cite{kyte1982,ikai1980,shannon1948}.
+
+A combinação dessas informações permite construir vetores numéricos que representam diferentes aspectos das proteínas. No FASTA2GO, são utilizadas características físico-químicas, composicionais e estatísticas extraídas das sequências. Embora o sistema também armazene características de dipeptídeos, elas não fazem parte do conjunto de atributos utilizado nos experimentos de comparação dos modelos.
+
+
+\subsection{Aprendizado de máquina aplicado à predição funcional}
+\label{subsec:aprendizado-maquina}
+
+O aprendizado de máquina permite que algoritmos identifiquem padrões em conjuntos de dados e utilizem essas relações para realizar previsões. Em tarefas de aprendizado supervisionado, os modelos são treinados a partir de exemplos que possuem características de entrada associadas a rótulos conhecidos. Na predição funcional de proteínas, as características extraídas das sequências constituem as entradas, enquanto as anotações da Gene Ontology são utilizadas como referência para o treinamento \cite{hastie2009,bonetta2020}.
+
+Como uma proteína pode apresentar mais de uma função molecular, essa tarefa pode ser tratada como um problema de classificação multirrótulo. Uma das estratégias utilizadas nesse contexto é a One-vs-Rest, que transforma o problema em classificadores binários independentes, permitindo estimar a associação de cada proteína a diferentes categorias funcionais \cite{zhangzhou2014}.
+
+Entre os algoritmos aplicáveis a essas tarefas estão a Regressão Logística, o Random Forest e o XGBoost, que utilizam estratégias distintas para identificar relações entre características e categorias. O Dummy Classifier pode ser empregado como referência básica de desempenho, enquanto ferramentas de aprendizado de máquina automatizado, como o AutoGluon, permitem treinar e selecionar modelos por meio de processos automatizados \cite{breiman2001,chen2016,erickson2020}.
+
+
+\subsection{Avaliação de modelos de classificação multirrótulo}
+\label{subsec:avaliacao-multirrótulo}
+
+A avaliação de modelos de classificação consiste em comparar as previsões realizadas com os rótulos de referência. Entre as métricas utilizadas, a precisão (Precision) representa a proporção de previsões positivas que estão corretas, enquanto a revocação (Recall) indica a proporção dos exemplos positivos que foram identificados pelo modelo. O F1-score combina essas duas medidas por meio de sua média harmônica, permitindo avaliar o equilíbrio entre precisão e revocação \cite{sokolova2009}.
+
+Em problemas multirrótulo, essas métricas podem ser agregadas por diferentes estratégias. A média Macro atribui o mesmo peso a todos os rótulos, a Micro considera conjuntamente todas as decisões de classificação e a Weighted utiliza o suporte de cada categoria como ponderação. Outras medidas, como Hamming Loss e Subset Accuracy, complementam a avaliação ao considerar, respectivamente, a proporção de decisões incorretas e a correspondência integral entre os conjuntos de rótulos previstos e de referência \cite{zhangzhou2014}.
+
+A utilização conjunta dessas medidas permite analisar diferentes aspectos do desempenho dos modelos, especialmente quando existe desequilíbrio na frequência dos rótulos funcionais.
+
+
+\subsection{Trabalhos relacionados}
+\label{subsec:trabalhos-relacionados}
+
+A predição funcional de proteínas tem sido investigada por diferentes abordagens computacionais. \citeonline{lee2007} discutem métodos baseados em similaridade de sequência e informações estruturais, demonstrando a importância de relacionar características de proteínas conhecidas à inferência funcional de outras moléculas.
+
+No contexto do aprendizado de máquina, \citeonline{bonetta2020} apresentam diferentes técnicas utilizadas na predição de funções proteicas, destacando a importância da representação dos dados e da escolha dos algoritmos. De maneira complementar, \citeonline{makrodimitris2020} discutem os desafios da predição automática de funções gênicas e as diferentes fontes de informação utilizadas nesses sistemas.
+
+Em relação à representação das sequências, \citeonline{jing2020} analisam diferentes métodos de codificação de aminoácidos empregados em tarefas de aprendizado de máquina. Já \citeonline{lin2024} apresentam uma revisão e comparação de métodos computacionais de predição funcional, abrangendo abordagens baseadas em sequência, estrutura, redes de interação e combinações dessas informações.
+
+Em conjunto, esses trabalhos demonstram a diversidade de métodos disponíveis para a predição funcional e evidenciam a importância da escolha das características e dos algoritmos utilizados. Diferentemente de abordagens voltadas à proposição de novas arquiteturas ou à combinação de múltiplas fontes de informação, esta pesquisa concentra-se na avaliação comparativa de algoritmos de aprendizado de máquina utilizando um conjunto fixo de características extraídas de sequências proteicas e anotações de Molecular Function como referência.
+
+Dessa forma, a contribuição do estudo está na análise do desempenho de diferentes algoritmos em uma tarefa específica de classificação multirrótulo, permitindo investigar quais abordagens apresentam melhores resultados nas condições experimentais estabelecidas.
