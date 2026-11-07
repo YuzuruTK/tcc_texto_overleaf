@@ -1,17 +1,15 @@
 % ==============================================================================
 % CAPÍTULO 5 - CONSIDERAÇÕES FINAIS
-% ==============================================================================
+% ============================================================================== 
 
 \section{Considerações Finais}
 \label{sec:consideracoes}
 
-Nesta seção, você pode iniciar apresentando uma breve síntese do trabalho e
-retomar os objetivos para situar os resultados finais. O foco principal é a
-discussão conclusiva, na qual você interpreta seus achados e demonstra como
-eles avançam o estado da arte, evitando que o texto seja apenas um resumo do
-que já foi apresentado ao longo do artigo.
+Este trabalho teve como objetivo desenvolver e avaliar um fluxo computacional para o processamento de sequências proteicas, a extração de características físico-químicas e composicionais e a investigação de sua utilidade na classificação de funções moleculares. Para isso, foi desenvolvido o FASTA2GO, projeto que integra a leitura de sequências no formato FASTA, o cálculo de características derivadas, o enriquecimento de informações por meio do UniProtKB e a organização de anotações funcionais da \textit{Gene Ontology} (GO) em uma estrutura adequada à realização de experimentos de aprendizado de máquina.
 
-Finalize o capítulo expondo as contribuições reais da pesquisa, suas eventuais
-limitações e as sugestões para trabalhos futuros. Essa abordagem demonstra
-maturidade acadêmica ao indicar caminhos para a continuidade da investigação
-e evidenciar o impacto do seu estudo no cenário atual.
+A implementação permitiu organizar uma base com 575.748 registros provenientes do UniProtKB/Swiss-Prot e construir um conjunto experimental com 478.961 proteínas associadas a pelo menos um dos 41 termos selecionados do aspecto \textit{Molecular Function}. O processo de construção dos rótulos relacionou 98,59\% das anotações de função molecular processadas a algum termo do vocabulário adotado. Esses resultados demonstram que o fluxo implementado foi capaz de integrar dados de sequências e anotações funcionais em escala suficiente para conduzir os experimentos propostos, preservando também registros e informações que não foram utilizados diretamente na etapa de treinamento.
+
+Na comparação principal, foram avaliados Dummy Classifier, Regressão Logística, Random Forest e XGBoost, utilizando os mesmos 35 atributos, os mesmos 41 rótulos e a mesma divisão entre treinamento e teste. Entre esses algoritmos, o Random Forest apresentou os melhores resultados nas métricas consideradas, alcançando Macro-F1 de 0,5430, Micro-F1 de 0,8251, Macro-Precision de 0,9463 e Hamming Loss de 0,0220. O XGBoost apresentou o segundo maior Macro-F1, com 0,3468, enquanto a Regressão Logística e o Dummy Classifier obtiveram resultados inferiores.
+
+Apesar da vantagem do Random Forest na comparação realizada, a diferença entre sua Macro-Precision (0,9463) e seu Macro-Recall (0,4230) merece atenção. O resultado indica que o modelo apresentou elevada precisão nas associações funcionais que previu, mas não recuperou uma parcela igualmente elevada de todas as associações presentes, quando os rótulos são considerados individualmente. Essa diferença reforça a importância de analisar mais de uma métrica, especialmente em um problema multirrótulo no qual as categorias apresentam frequências distintas. Portanto, o melhor desempenho relativo do Random Forest não significa que a representação utilizada seja suficiente para identificar todas as funções de uma proteína.
+
