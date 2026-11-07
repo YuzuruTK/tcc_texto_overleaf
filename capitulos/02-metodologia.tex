@@ -14,9 +14,9 @@ Quanto aos seus objetivos, a pesquisa apresenta caráter exploratório e descrit
 
 Em relação à abordagem, trata-se de uma pesquisa quantitativa, pois a avaliação das diferentes abordagens é realizada por meio de medidas numéricas de desempenho, permitindo comparar os resultados obtidos pelos algoritmos em condições experimentais definidas.
 
-Como procedimento técnico, foi conduzido um estudo experimental computacional e comparativo, no qual diferentes algoritmos de aprendizado de máquina foram aplicados à mesma tarefa de classificação multirrótulo. Na comparação principal, foram mantidos constantes o conjunto de características utilizado como entrada, os rótulos funcionais e a divisão dos dados entre treinamento e teste. Dessa forma, busca-se concentrar a análise nas diferenças de desempenho entre os algoritmos avaliados.
+Como procedimento técnico, foi conduzido um estudo experimental computacional e comparativo, no qual diferentes algoritmos de aprendizado de máquina foram aplicados à mesma tarefa de classificação multirrótulo. Na comparação principal, foram mantidos constantes o conjunto de características utilizado como entrada, os rótulos funcionais e a divisão dos dados entre treinamento e teste. Dessa forma, busca-se concentrar a análise nas diferenças de desempenho entre os algoritmos avaliados \cite{prodanov2013}.
 
-Adicionalmente, foi realizado um experimento complementar utilizando a biblioteca AutoGluon Tabular, cuja configuração estabelece condições específicas de amostragem e seleção de rótulos. Esse experimento é analisado separadamente da comparação principal, considerando suas particularidades metodológicas \cite{prodanov2013}.
+Adicionalmente, foi realizado um experimento complementar utilizando a biblioteca AutoGluon Tabular, cuja configuração estabelece condições específicas de amostragem e seleção de rótulos. Esse experimento é analisado separadamente da comparação principal, considerando suas particularidades metodológicas.
 
 
 \subsection{Fonte e seleção dos dados}
@@ -36,7 +36,7 @@ Para a realização dos experimentos de aprendizado de máquina, foram considera
 \subsection{Construção dos rótulos funcionais}
 \label{subsec:rotulos_funcionais}
 
-As funções das proteínas foram representadas por meio de termos da Gene Ontology (GO), recurso que organiza informações funcionais em uma estrutura hierárquica e padronizada. A Gene Ontology contempla três aspectos principais: Processo Biológico (Biological Process), Componente Celular (Cellular Component) e Função Molecular (Molecular Function). Neste trabalho, foi utilizado exclusivamente o aspecto Molecular Function, por descrever as atividades moleculares desempenhadas pelos produtos gênicos \cite{geneontology2026}.
+As funções das proteínas foram representadas por meio de termos da Gene Ontology (GO), recurso que organiza informações funcionais em uma estrutura hierárquica e padronizada. A Gene Ontology contempla três aspectos principais: Processo Biológico (Biological Process), Componente Celular (Cellular Component) e Função Molecular (Molecular Function). Neste trabalho, foi utilizado exclusivamente o aspecto Molecular Function, por descrever as atividades moleculares desempenhadas pelos produtos gênicos \cite{goconsortium2026}.
 
 Para reduzir a granularidade dos termos funcionais e estabelecer um conjunto de categorias adequado à tarefa de classificação, foi utilizado como referência o vocabulário GO Slim \texttt{goslim\_generic}, restrito ao aspecto Molecular Function. Entretanto, o vocabulário genérico não contempla o termo \texttt{GO:0005488} (binding), embora inclua categorias relacionadas à atividade catalítica. Por esse motivo, foi incorporada uma extensão específica contendo esse termo, resultando em um vocabulário de 41 rótulos funcionais.
 
@@ -168,7 +168,7 @@ Nesse procedimento, é construído um classificador para cada termo GO, respons�
 
 A comparação principal contempla quatro abordagens: Dummy Classifier, Regressão Logística, Random Forest e XGBoost. Os modelos foram implementados utilizando bibliotecas de aprendizado de máquina disponíveis no ecossistema Python, principalmente o scikit-learn e o XGBoost \cite{pedregosa2011,chen2016}.
 
-O \textbf{Dummy Classifier} foi utilizado como modelo de referência (*baseline*), empregando a estratégia \texttt{prior}. Nessa configuração, as previsões são baseadas nas proporções das classes observadas no conjunto de treinamento, permitindo estabelecer uma referência básica para a avaliação dos modelos supervisionados.
+O \textbf{Dummy Classifier} foi utilizado como modelo de referência (\textit{baseline}), empregando a estratégia \texttt{prior}. Nessa configuração, as previsões são baseadas nas proporções das classes observadas no conjunto de treinamento, permitindo estabelecer uma referência básica para a avaliação dos modelos supervisionados.
 
 A \textbf{Regressão Logística} foi implementada utilizando a regularização com parâmetro $C=1{,}0$, solucionador \texttt{liblinear} e limite de 2.000 iterações. Antes da classificação, foi aplicado o \texttt{StandardScaler} para padronizar as características. Essa transformação foi organizada em um \textit{pipeline}, garantindo que os parâmetros de padronização fossem ajustados exclusivamente com os dados de treinamento.
 
@@ -200,7 +200,7 @@ Embora o experimento complementar utilize o mesmo conjunto de 35 característica
 
 A avaliação dos modelos foi realizada por meio de métricas quantitativas calculadas a partir da comparação entre os rótulos previstos pelos classificadores e os rótulos de referência presentes no conjunto de teste. Considerando a natureza multirrótulo do problema, foram utilizadas métricas com diferentes estratégias de agregação, permitindo analisar tanto o desempenho geral quanto o comportamento dos modelos diante de rótulos com diferentes frequências.
 
-As métricas de maior interesse para a comparação são precisão (*Precision*) e F1-score. A precisão representa a proporção de previsões positivas realizadas corretamente em relação ao total de previsões positivas do modelo. Seu cálculo é definido por:
+As métricas de maior interesse para a comparação são precisão (\textit{Precision}) e F1-score. A precisão representa a proporção de previsões positivas realizadas corretamente em relação ao total de previsões positivas do modelo. Seu cálculo é definido por:
 
 \begin{equation}
 Precision = \frac{TP}{TP + FP}
@@ -208,7 +208,7 @@ Precision = \frac{TP}{TP + FP}
 
 em que $TP$ representa os verdadeiros positivos e $FP$ os falsos positivos.
 
-A revocação (*Recall*) representa a proporção de exemplos positivos corretamente identificados pelo modelo em relação ao total de exemplos efetivamente positivos. É calculada por:
+A revocação (\textit{Recall}) representa a proporção de exemplos positivos corretamente identificados pelo modelo em relação ao total de exemplos efetivamente positivos. É calculada por:
 
 \begin{equation}
 Recall = \frac{TP}{TP + FN}
